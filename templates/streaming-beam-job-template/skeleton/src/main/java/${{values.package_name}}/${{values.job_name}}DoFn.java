@@ -1,4 +1,4 @@
-package ${{package_name}};
+package ${{values.package_name}};
 
 import org.apache.beam.sdk.state.TimeDomain;
 import org.apache.beam.sdk.state.Timer;
@@ -13,7 +13,7 @@ import org.joda.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ${{job_name}}DoFn extends DoFn<KV<Long, Long>, KV<Long, Long>> {
+public class ${{values.job_name}}DoFn extends DoFn<KV<Long, Long>, KV<Long, Long>> {
     @TimerId("timer")
     private final TimerSpec timerSpec;
 
@@ -27,7 +27,7 @@ public class ${{job_name}}DoFn extends DoFn<KV<Long, Long>, KV<Long, Long>> {
 
     private static int initCount;
 
-    public ${{job_name}}DoFn() {
+    public ${{values.job_name}}DoFn() {
         timerSpec = TimerSpecs.timer(TimeDomain.PROCESSING_TIME);
         initItems = new ArrayList<>();
         initialized = false;

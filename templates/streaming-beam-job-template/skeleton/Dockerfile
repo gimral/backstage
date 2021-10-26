@@ -26,5 +26,5 @@ RUN mvn package
 FROM flink:1.13 as flinkbase
 
 RUN mkdir -p $FLINK_HOME/usrlib
-COPY --from=packager /app/target/${{job_name}}-bundled-1.0.0.jar $FLINK_HOME/usrlib/${{job_name}}-bundled-1.0.0.jar
+COPY --from=packager /app/target/${{values.job_name}}-bundled-1.0.0.jar $FLINK_HOME/usrlib/${{values.job_name}}-bundled-1.0.0.jar
 

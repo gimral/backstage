@@ -1,4 +1,4 @@
-package ${{package_name}};
+package ${{values.package_name}};
 
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.GenerateSequence;
@@ -18,14 +18,14 @@ import org.joda.time.Duration;
 
 import java.util.Map;
 
-public class ${{job_name}}Test {
+public class ${{values.job_name}}Test {
     public static void main(String[] args) {
         PipelineOptions options = PipelineOptionsFactory.fromArgs(args).as(PipelineOptions.class);
         Pipeline p = Pipeline.create(options);
 
         PCollectionView<Map<Long, Long>> map = p.apply(GenerateSequence.from(1).withRate(1, Duration.standardSeconds(6)))
                 .apply(WithKeys.of(1L))
-                .apply(ParDo.of(new ${{job_name}}DoFn()))
+                .apply(ParDo.of(new ${{values.job_name}}DoFn()))
                 .apply(Window.<KV<Long,Long>>into(new GlobalWindows())
                         .triggering(Repeatedly.forever(AfterPane.elementCountAtLeast(1)))
                         .discardingFiredPanes())
@@ -35,7 +35,7 @@ public class ${{job_name}}Test {
                 .apply(ParDo.of(new DoFn<Long, Long>() {
                     @ProcessElement
                     public void processElement(ProcessContext c){
-                        Map<Long,Long> lookup = c.${{job_name}}(map);
+                        Map<Long,Long> lookup = c.SideInput(map);
                         if(lookup.containsKey(c.element())){
                             System.out.println("Found"+ c.element());
                             return;
@@ -43,7 +43,7 @@ public class ${{job_name}}Test {
                         System.out.println("Not Found"+ c.element());
                         c.output(c.element());
                     }
-                }).with${{job_name}}s(map));
+                }).withSideInputs(map));
 
         p.run().waitUntilFinish();
 

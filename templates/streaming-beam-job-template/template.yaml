@@ -61,7 +61,7 @@ spec:
               values:
                   job_name: "{{ parameters.job_name }}"
                   description: "{{ parameters.description }}"
-                  package_name: "{{ parameters.package_name }}"
+                  package_name: "{{ parameters.package-name }}"
                   owner: "{{ parameters.owner }}"
                   destination: "{{ parseRepoUrl parameters.repoUrl }}"
 
