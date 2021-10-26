@@ -82,11 +82,11 @@ catalog:
     # - type: url
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme/org.yaml
 
-    # # Backstage example templates
-    # - type: url
-    #   target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/react-ssr-template/template.yaml
-    #   rules:
-    #     - allow: [Template]
+    # Backstage example templates
+    - type: url
+      target: https://github.com/gimral/backstage/blob/master/templates/streaming-sql-job-template/template.yaml
+      rules:
+        - allow: [Template]
     # - type: url
     #   target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/springboot-grpc-template/template.yaml
     #   rules:
