@@ -1,14 +1,14 @@
 apiVersion: backstage.io/v1beta2
 kind: Template
 metadata:
-    name: streaming-sql-job-template
-    title: Streming SQL Job
-    description: Create a simple streaming sql job using Flink
+    name: streaming-beam-job-template
+    title: Streming Beam Job
+    description: Create a simple flink job using Beam
     tags:
         - rts
         - streaming
         - flink
-        - sql
+        - beam
 spec:
     owner: service@example.com
     type: stream
