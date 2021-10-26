@@ -1,0 +1,78 @@
+apiVersion: backstage.io/v1beta2
+kind: Template
+metadata:
+    name: mongo-sink-connector-template
+    title: Mongo Sink Connector
+    description: Create a Mongo Sink Connector
+    tags:
+        - rts
+        - kafka-connect
+spec:
+    owner: service@example.com
+    type: kafka
+
+    parameters:
+        - title: Provide sink configuration
+          required:
+              - table_name
+              - owner
+          properties:
+              table_name:
+                  title: Table Name
+                  type: string
+                  description: Unique name of the table
+              description:
+                  title: Description
+                  type: string
+                  description: Help others understand what this job is for.
+              owner:
+                  title: Owner
+                  type: string
+                  description: Owner of the component
+                  ui:field: OwnerPicker
+                  ui:options:
+                      allowedKinds:
+                          - Group
+        - title: Choose a location
+          required:
+              - repoUrl
+          properties:
+              repoUrl:
+                  title: Repository Location
+                  type: string
+                  ui:field: RepoUrlPicker
+                  ui:options:
+                      allowedHosts:
+                          - github.com
+
+    steps:
+        - id: template
+          name: Fetch Skeleton + Template
+          action: fetch:template
+          input:
+              url: ./skeleton
+              values:
+                  job_name: "{{ parameters.job_name }}"
+                  description: "{{ parameters.description }}"
+                  sql: "{{ parameters.sql }}"
+                  owner: "{{ parameters.owner }}"
+                  destination: "{{ parseRepoUrl parameters.repoUrl }}"
+
+        - id: publish
+          name: Publish
+          action: publish:github
+          input:
+              allowedHosts: ["github.com"]
+              description: "This is {{ parameters.job_name }}"
+              repoUrl: "{{ parameters.repoUrl }}"
+
+        - id: register
+          name: Register
+          action: catalog:register
+          input:
+              repoContentsUrl: "{{ steps.publish.output.repoContentsUrl }}"
+              catalogInfoPath: "/catalog-info.yaml"
+
+    output:
+        remoteUrl: "{{ steps.publish.output.remoteUrl }}"
+        entityRef: "{{ steps.register.output.entityRef }}"
